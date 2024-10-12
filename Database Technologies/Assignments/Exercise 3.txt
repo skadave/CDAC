@@ -1,0 +1,175 @@
+Exercise 3
+
+UPDATE S
+SET Sname = 'John'
+WHERE Sname = 'Sup1';
+
+UPDATE S
+SET Sname = 'Mark'
+WHERE Sname = 'Sup2';
+
+UPDATE S
+SET Sname = 'Lane'
+WHERE Sname = 'Sup3';
+
+UPDATE S
+SET Sname = 'Ethan'
+WHERE Sname = 'Sup4';
+
+INSERT INTO S
+VALUES ('S5','Lawson', 50, 'London'), ('S6','James', 60, 'Athens');
+
++------+--------+--------+----------+
+| S#   | Sname  | Status | City     |
++------+--------+--------+----------+
+| S1   | John   |     20 | London   |
+| S2   | Mark   |     10 | New York |
+| S3   | Lane   |     30 | Athens   |
+| S4   | Ethan  |     40 | Paris    |
+| S5   | Lawson |     50 | London   |
+| S6   | James  |     60 | Athens   |
++------+--------+--------+----------+
+----------------------------------------------------------------------------------------------------------------------
+1. Display all the Supplier names with the initial letter capital.
+
+SELECT CONCAT( SUBSTR(UPPER(Sname) , 1, 1),  SUBSTR(LOWER(Sname) , 2) ) AS "Sname" FROM S;
+
++--------+
+| Sname  |
++--------+
+| John   |
+| Mark   |
+| Lane   |
+| Ethan  |
+| Lawson |
+| James  |
++--------+
+
+2. Display all the Supplier names in upper case.  
+
+SELECT UPPER(Sname) from S;
++--------------+
+| UPPER(Sname) |
++--------------+
+| JOHN         |
+| MARK         |
+| LANE         |
+| ETHAN        |
+| LAWSON       |
+| JAMES        |
++--------------+
+
+3. Display all the Supplier names in lower case.  
+
+SELECT LOWER(Sname) FROM S;
++--------------+
+| LOWER(Sname) |
++--------------+
+| john         |
+| mark         |
+| lane         |
+| ethan        |
+| lawson       |
+| james        |
++--------------+
+
+4. Display all the Supplier names padded to 25 characters, with spaces on the left.  
+
+SELECT LPAD(Sname, 25, ' ') FROM S;
++---------------------------+
+| LPAD(Sname, 25, ' ')      |
++---------------------------+
+|                      John |
+|                      Mark |
+|                      Lane |
+|                     Ethan |
+|                    Lawson |
+|                     James |
++---------------------------+
+
+5. Display all the Supplier names (with ‘la’ replaced by ‘ro’).     
+HINT: REPLACE.
+
+SELECT REPLACE (REPLACE(Sname, 'la', 'ro'), 'La','ro') FROM S;
+
++-------------------------------------------------+
+| REPLACE (REPLACE(Sname, 'la', 'ro'), 'La','ro') |
++-------------------------------------------------+
+| John                                            |
+| Mark                                            |
+| rone                                            |
+| Ethan                                           |
+| rowson                                          |
+| James                                           |
++-------------------------------------------------+
+
+6. Implement the above command such that ‘l’ is replaced with ‘r’ and ‘a’ is replaced 
+with ‘o’.   
+
+SELECT REPLACE (REPLACE (REPLACE (REPLACE(Sname,'l','r'), 'L', 'r'), 'a', 'o'), 'A','o') as 'Output' FROM S;
+
++--------+
+| Output |
++--------+
+| John   |
+| Mork   |
+| rone   |
+| Ethon  |
+| rowson |
+| Jomes  |
++--------+
+
+7. Display the Supplier names and the lengths of the names.   
+
+SELECT Sname, LENGTH(Sname) FROM S;
+
++--------+---------------+
+| Sname  | LENGTH(Sname) |
++--------+---------------+
+| John   |             4 |
+| Mark   |             4 |
+| Lane   |             4 |
+| Ethan  |             5 |
+| Lawson |             6 |
+| James  |             5 |
++--------+---------------+
+
+8. Use the soundex function to search for a supplier by the name of ‘BLOKE’.  
+
+SELECT * FROM S
+WHERE SOUNDEX(Sname) = SOUNDEX('BLOKE');
+Empty set (0.00 sec)
+
+SELECT * FROM S
+WHERE SOUNDEX(Sname) = SOUNDEX('MAARK');
++------+-------+--------+----------+
+| S#   | Sname | Status | City     |
++------+-------+--------+----------+
+| S2   | Mark  |     10 | New York |
++------+-------+--------+----------+
+
+9. Display the Supplier name and the status (as Ten, Twenty, Thirty, etc.).   
+
+SELECT Sname, REPLACE( REPLACE (REPLACE( REPLACE (REPLACE( REPLACE(Status, 10, 'Ten'), 20, 'Twenty'), 30, 'Thirty'), 40, 'Forty'), 50, 'Fifty'), 60, 'Sixty') as 'Output' FROM S;
+
++--------+--------+
+| Sname  | Output |
++--------+--------+
+| John   | Twenty |
+| Mark   | Ten    |
+| Lane   | Thirty |
+| Ethan  | Forty  |
+| Lawson | Fifty  |
+| James  | Sixty  |
++--------+--------+
+
+
+10. Display the current day (e.g. Thursday).   
+
+SELECT DAYNAME( SYSDATE() ) FROM Dual;
+
++----------------------+
+| DAYNAME( SYSDATE() ) |
++----------------------+
+| Saturday             |
++----------------------+

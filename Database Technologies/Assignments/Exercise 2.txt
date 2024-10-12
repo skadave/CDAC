@@ -1,0 +1,136 @@
+Exercise 2
+
+1)
+SELECT * FROM S
+ORDER BY City DESC;
+
++------+-------+--------+----------+
+| S#   | Sname | Status | City     |
++------+-------+--------+----------+
+| S4   | Sup4  |     40 | Paris    |
+| S2   | Sup2  |     10 | New York |
+| S1   | Sup1  |     20 | London   |
+| S3   | Sup3  |     30 | Athens   |
++------+-------+--------+----------+
+-----------------------------------------------
+
+mysql> insert into p
+    -> values ('P5', 'Transmission', 'Silver', 4, 'Paris'), ('P6', 'Engine',
+ 'Black', 34.5, 'Athens');
+ 
+ +------+--------------+--------+--------+----------+
+| P#   | Pname        | Color  | Weight | City     |
++------+--------------+--------+--------+----------+
+| P1   | Spark Plug   | Grey   |   13.5 | London   |
+| P2   | Gear         | Blue   |  11.25 | New York |
+| P3   | Pedal        | Red    |   15.5 | Paris    |
+| P4   | Battery      | Yellow |      8 | Athens   |
+| P5   | Transmission | Silver |      4 | Paris    |
+| P6   | Engine       | Black  |   34.5 | Athens   |
++------+--------------+--------+--------+----------+
+------------------------------------------------
+2)
+select * from P
+ORDER BY City, Pname;
+
++------+--------------+--------+--------+----------+
+| P#   | Pname        | Color  | Weight | City     |
++------+--------------+--------+--------+----------+
+| P4   | Battery      | Yellow |      8 | Athens   |
+| P6   | Engine       | Black  |   34.5 | Athens   |
+| P1   | Spark Plug   | Grey   |   13.5 | London   |
+| P2   | Gear         | Blue   |  11.25 | New York |
+| P3   | Pedal        | Red    |   15.5 | Paris    |
+| P5   | Transmission | Silver |      4 | Paris    |
++------+--------------+--------+--------+----------+
+
+3)
+SELECT * FROM S
+WHERE Status between 10 and 20;
+
++------+-------+--------+----------+
+| S#   | Sname | Status | City     |
++------+-------+--------+----------+
+| S1   | Sup1  |     20 | London   |
+| S2   | Sup2  |     10 | New York |
++------+-------+--------+----------+
+
+4)
+SELECT * FROM P
+WHERE Weight NOT BETWEEN 10 and 15;
+
++------+--------------+--------+--------+--------+
+| P#   | Pname        | Color  | Weight | City   |
++------+--------------+--------+--------+--------+
+| P3   | Pedal        | Red    |   15.5 | Paris  |
+| P4   | Battery      | Yellow |      8 | Athens |
+| P5   | Transmission | Silver |      4 | Paris  |
+| P6   | Engine       | Black  |   34.5 | Athens |
++------+--------------+--------+--------+--------+
+
+5)
+SELECT * FROM P
+WHERE Pname like 'S%';
+
++------+------------+-------+--------+--------+
+| P#   | Pname      | Color | Weight | City   |
++------+------------+-------+--------+--------+
+| P1   | Spark Plug | Grey  |   13.5 | London |
++------+------------+-------+--------+--------+
+
+6)
+SELECT * FROM S
+WHERE City like 'L%';
++------+-------+--------+--------+
+| S#   | Sname | Status | City   |
++------+-------+--------+--------+
+| S1   | Sup1  |     20 | London |
++------+-------+--------+--------+
+
+-------------------------------------------------------------------------------------------------------
+UPDATE J
+SET Jname = 'Atom'
+WHERE Jname = 'Proj1';
+
+UPDATE J
+SET Jname = 'Flash'
+WHERE Jname = 'Proj2';
+
+UPDATE J
+SET Jname = 'Midas'
+WHERE Jname = 'Proj3';
+
+UPDATE J
+SET Jname = 'CanCan'
+WHERE Jname = 'Proj4';
+
+INSERT INTO J (`J#`, Jname, City)
+VALUES('J5', 'Navi', 'Paris'), ('J6', 'Vitality', 'London');
+
+mysql> SELECT * FROM J;
++------+----------+----------+
+| J#   | Jname    | City     |
++------+----------+----------+
+| J1   | Atom     | Athens   |
+| J2   | Flash    | Paris    |
+| J3   | Midas    | London   |
+| J3   | CanCan   | New York |
+| J5   | Navi     | Paris    |
+| J6   | Vitality | London   |
++------+----------+----------+ 
+-------------------------------------------------------------------------------------------------------
+
+7)
+SELECT * FROM J
+WHERE Jname like '__n%';
+
++------+--------+----------+
+| J#   | Jname  | City     |
++------+--------+----------+
+| J3   | CanCan | New York |
++------+--------+----------+
+
+
+
+ 
+

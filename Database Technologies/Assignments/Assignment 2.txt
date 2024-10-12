@@ -1,0 +1,17 @@
+Assignment 2
+
+1) Which field of the Customers table is the primary key?
+-> Cnum is the primary key of the Customers table as it store all unique ids of customers and we can uniquely identify each customer/row in the table with it. 
+
+
+2) What is the 4th column of the Customers table?
+-> Rating column is the 4th column in Customers table.
+
+
+3) What is another word for row? For column?
+-> In SQL, rows are also called as 'records' and columns are also called as 'fields'. 
+
+
+4) Why isn’t it possible to see the first five rows of a table?
+-> Because when we insert the rows, they (file per row) are not stored in a sequential manner. They get stored at random locations in the SQL DB Server Hard Disk.
+So by default, the rows are displayed in the ascending order of their 'addresses' in the Hard Disk.

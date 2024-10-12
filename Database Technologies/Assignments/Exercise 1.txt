@@ -1,0 +1,268 @@
+Exercise 1
+
+1)
+CREATE table SEMP(
+EMPNO CHAR(4),
+EMPNAME CHAR(20), 
+BASIC FLOAT,
+DEPTNO CHAR(2), 
+DEPTHEAD CHAR(4) 
+);
+
+
+2)
+CREATE table SDEPT(
+DEPTNO CHAR(2),
+DEPTNAME CHAR(15)
+);
+
+
+3)
+INSERT INTO SDEPT(DEPTNO, DEPTNAME)
+VALUES ('10','Development'), ('20','Training');
+
+
+4)
+INSERT INTO SEMP (EMPNO, EMPNAME, BASIC, DEPTNO)
+VALUES('0001', 'SUNIL', 6000, '10'), ('0002', 'HIREN', 8000, '20'); 
+
+INSERT INTO SEMP (EMPNO, EMPNAME, BASIC, DEPTNO, DEPTHEAD)
+VALUES('0003', 'ALI', 4000, '10', '0001');
+
+INSERT INTO SEMP (EMPNO, EMPNAME, BASIC, DEPTHEAD)
+VALUES('0004', 'GEORGE', 6000, '0002');
+
++-------+---------+-------+--------+----------+
+| EMPNO | EMPNAME | BASIC | DEPTNO | DEPTHEAD |
++-------+---------+-------+--------+----------+
+| 0001  | SUNIL   |  6000 | 10     | NULL     |
+| 0002  | HIREN   |  8000 | 20     | NULL     |
+| 0003  | ALI     |  4000 | 10     | 0001     |
+| 0004  | GEORGE  |  6000 | NULL   | 0002     |
++-------+---------+-------+--------+----------+
+
+
+
+CREATE table S(`S#` varchar(3), Sname varchar(20), Status int(4), City varchar(10));
+
+CREATE table P (`P#` varchar(3), Pname varchar(20), Color varchar(10), Weight float, City varchar(10) );
+
+CREATE table J (`J#` varchar(3), Jname varchar(20), City varchar(10) );
+
+CREATE table SPJ (`S#` varchar(3), `P#` varchar(3), `J#` varchar(3), Qty int(4) );
+
+INSERT INTO S(`S#`, Sname, Status, City)
+VALUES('S1','Sup1', 20, 'London'), ('S2','Sup2', 10, 'New York'), ('S3','Sup3', 30, 'Athens'), ('S4','Sup4', 40, 'Paris');
+
++------+-------+--------+----------+
+| S#   | Sname | Status | City     |
++------+-------+--------+----------+
+| S1   | Sup1  |     20 | London   |
+| S2   | Sup2  |     10 | New York |
+| S3   | Sup3  |     30 | Athens   |
+| S4   | Sup4  |     40 | Paris    |
++------+-------+--------+----------+
+
+INSERT INTO P(`P#`, Pname , Color , Weight , City)
+VALUES ('P1', 'Part1', 'Grey', 13.5, 'London'), ('P2', 'Part2', 'Blue', 11.25, 'New York'), ('P3', 'Part3', 'Red', 15.5, 'Paris'), ('P4', 'Part4', 'Yellow', 8, 'Athens');
++------+-------+--------+--------+----------+
+| P#   | Pname | Color  | Weight | City     |
++------+-------+--------+--------+----------+
+| P1   | Part1 | Grey   |   13.5 | London   |
+| P2   | Part2 | Blue   |  11.25 | New York |
+| P3   | Part3 | Red    |   15.5 | Paris    |
+| P4   | Part4 | Yellow |      8 | Athens   |
++------+-------+--------+--------+----------+
+
+INSERT INTO J(`J#`, Jname, City)
+VALUES('J1','Proj1','Athens'), ('J2','Proj2','Paris'), ('J3','Proj3','London'), ('J3','Proj4','New York');
++------+-------+----------+
+| J#   | Jname | City     |
++------+-------+----------+
+| J1   | Proj1 | Athens   |
+| J2   | Proj2 | Paris    |
+| J3   | Proj3 | London   |
+| J3   | Proj4 | New York |
++------+-------+----------+
+
+INSERT INTO SPJ(`S#`, `P#`, `J#`, Qty)
+VALUES('S1','P1','J1', 3), ('S2','P2','J2', 5), ('S3','P3','J3', 2), ('S4','P4','J4', 9);
++------+------+------+------+
+| S#   | P#   | J#   | Qty  |
++------+------+------+------+
+| S1   | P1   | J1   |    3 |
+| S2   | P2   | J2   |    5 |
+| S3   | P3   | J3   |    2 |
+| S4   | P4   | J4   |    9 |
++------+------+------+------+
+
+5)
+SELECT * FROM S;
++------+-------+--------+----------+
+| S#   | Sname | Status | City     |
++------+-------+--------+----------+
+| S1   | Sup1  |     20 | London   |
+| S2   | Sup2  |     10 | New York |
+| S3   | Sup3  |     30 | Athens   |
+| S4   | Sup4  |     40 | Paris    |
++------+-------+--------+----------+
+
+6)
+SELECT `S#`,SNAME FROM S;
++------+-------+
+| S#   | SNAME |
++------+-------+
+| S1   | Sup1  |
+| S2   | Sup2  |
+| S3   | Sup3  |
+| S4   | Sup4  |
++------+-------+
+
+7)
+SELECT Pname, Color FROM P
+WHERE City = 'London';
++-------+-------+
+| Pname | Color |
++-------+-------+
+| Part1 | Grey  |
++-------+-------+
+
+8)
+SELECT * FROM S
+WHERE CITY = 'London';
++------+-------+--------+--------+
+| S#   | Sname | Status | City   |
++------+-------+--------+--------+
+| S1   | Sup1  |     20 | London |
++------+-------+--------+--------+
+
+9)
+SELECT * FROM S
+WHERE City='Paris' OR City='Athens';
+
+OR
+
+SELECT * FROM S
+WHERE City IN ('Paris', 'Athens');
+
++------+-------+--------+--------+
+| S#   | Sname | Status | City   |
++------+-------+--------+--------+
+| S3   | Sup3  |     30 | Athens |
+| S4   | Sup4  |     40 | Paris  |
++------+-------+--------+--------+
+
+10)
+SELECT * FROM J
+WHERE City = 'Athens';
++------+-------+--------+
+| J#   | Jname | City   |
++------+-------+--------+
+| J1   | Proj1 | Athens |
++------+-------+--------+
+
+11)
+SELECT Pname from P
+WHERE Weight between 12 and 14;
++-------+
+| Pname |
++-------+
+| Part1 |
++-------+
+
+12)
+SELECT * FROM S
+WHERE Status >= 20;
++------+-------+--------+--------+
+| S#   | Sname | Status | City   |
++------+-------+--------+--------+
+| S1   | Sup1  |     20 | London |
+| S3   | Sup3  |     30 | Athens |
+| S4   | Sup4  |     40 | Paris  |
++------+-------+--------+--------+
+
+13)
+SELECT * FROM S
+WHERE City != 'London';
+
+OR
+
+SELECT * FROM S
+WHERE City NOT IN ('London');
+
++------+-------+--------+----------+
+| S#   | Sname | Status | City     |
++------+-------+--------+----------+
+| S2   | Sup2  |     10 | New York |
+| S3   | Sup3  |     30 | Athens   |
+| S4   | Sup4  |     40 | Paris    |
++------+-------+--------+----------+
+
+14)
+SELECT DISTINCT City from S;
++----------+
+| City     |
++----------+
+| London   |
+| New York |
+| Athens   |
+| Paris    |
++----------+
+
+15)
+SELECT Weight*1000 'Weight in Miligrams', Weight/1000 'Weight in Kg' from P;
++---------------------+--------------+
+| Weight in Miligrams | Weight in Kg |
++---------------------+--------------+
+|               13500 |       0.0135 |
+|               11250 |      0.01125 |
+|               15500 |       0.0155 |
+|                8000 |        0.008 |
++---------------------+--------------+
+
+SELECT RPAD(Weight*1000, 19, ' ') 'Weight in Miligrams', RPAD(Weight/1000, 12, ' ') 'Weight in Kg' from P;
++---------------------+--------------+
+| Weight in Miligrams | Weight in Kg |
++---------------------+--------------+
+| 13500               | 0.0135       |
+| 11250               | 0.01125      |
+| 15500               | 0.0155       |
+| 8000                | 0.008        |
++---------------------+--------------+
+
+-------------------------------------------------------------------------------------------------------
+
+Updating P table
++------+-------+--------+--------+----------+
+| P#   | Pname | Color  | Weight | City     |
++------+-------+--------+--------+----------+
+| P1   | Part1 | Grey   |   13.5 | London   |
+| P2   | Part2 | Blue   |  11.25 | New York |
+| P3   | Part3 | Red    |   15.5 | Paris    |
+| P4   | Part4 | Yellow |      8 | Athens   |
++------+-------+--------+--------+----------+
+
+UPDATE P
+SET Pname = 'Spark Plug' 
+WHERE Pname = 'Part1';
+
+UPDATE P
+SET Pname = 'Gear' 
+WHERE Pname = 'Part2';
+
+UPDATE P
+SET Pname = 'Pedal' 
+WHERE Pname = 'Part3';
+
+UPDATE P
+SET Pname = 'Battery' 
+WHERE Pname = 'Part4';
+
++------+------------+--------+--------+----------+
+| P#   | Pname      | Color  | Weight | City     |
++------+------------+--------+--------+----------+
+| P1   | Spark Plug | Grey   |   13.5 | London   |
+| P2   | Gear       | Blue   |  11.25 | New York |
+| P3   | Pedal      | Red    |   15.5 | Paris    |
+| P4   | Battery    | Yellow |      8 | Athens   |
++------+------------+--------+--------+----------+
