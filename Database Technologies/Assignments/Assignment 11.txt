@@ -1,0 +1,138 @@
+Assignment 11
+
+orders
++------+---------+------------+------+------+
+| Onum | Amt     | Odate      | Cnum | Snum |
++------+---------+------------+------+------+
+| 3001 |   18.69 | 1990-10-03 | 2008 | 1007 |
+| 3003 |  767.19 | 1990-10-03 | 2001 | 1001 |
+| 3002 | 1900.10 | 1990-10-03 | 2007 | 1004 |
+| 3005 | 5160.45 | 1990-10-03 | 2003 | 1002 |
+| 3006 | 1098.16 | 1990-10-03 | 2008 | 1007 |
+| 3009 | 1713.23 | 1990-10-04 | 2002 | 1003 |
+| 3007 |   75.75 | 1990-10-04 | 2004 | 1002 |
+| 3008 | 4723.00 | 1990-10-05 | 2006 | 1001 |
+| 3010 | 1309.95 | 1990-10-06 | 2004 | 1002 |
+| 3011 | 9891.88 | 1990-10-06 | 2006 | 1001 |
++------+---------+------------+------+------+
+
+customers
++------+----------+----------+--------+------+
+| Cnum | Cname    | City     | Rating | Snum |
++------+----------+----------+--------+------+
+| 2001 | Hoffman  | London   |    100 | 1001 |
+| 2002 | Giovanni | Rome     |    200 | 1003 |
+| 2003 | Liu      | San Jose |    200 | 1002 |
+| 2004 | Grass    | Berlin   |    300 | 1002 |
+| 2006 | Clemens  | London   |    100 | 1001 |
+| 2008 | Cisneros | San Jose |    300 | 1007 |
+| 2007 | Pereira  | Rome     |    100 | 1004 |
++------+----------+----------+--------+------+
+
+salespeople
++------+---------+-----------+------+
+| Snum | Sname   | City      | Comm |
++------+---------+-----------+------+
+| 1001 | Peel    | London    | 0.12 |
+| 1002 | Serres  | San Jose  | 0.13 |
+| 1004 | Motika  | London    | 0.11 |
+| 1007 | Rifkin  | Barcelona | 0.15 |
+| 1003 | Axelrod | New York  | 0.10 |
++------+---------+-----------+------+
+
+
+1) Write a query that uses a subquery to obtain all orders for the customer named 
+Cisneros. Assume you do not know his customer number (cnum).
+
+select * from Orders 
+where Cnum = (select Cnum from Customers
+where Cname = 'Cisneros');
+
++------+---------+------------+------+------+
+| Onum | Amt     | Odate      | Cnum | Snum |
++------+---------+------------+------+------+
+| 3001 |   18.69 | 1990-10-03 | 2008 | 1007 |
+| 3006 | 1098.16 | 1990-10-03 | 2008 | 1007 |
++------+---------+------------+------+------+
+
+2) Write a query that produces the names and ratings of all customers who have 
+above-average orders.
+
++------+---------+------------+------+------+
+| Onum | Amt     | Odate      | Cnum | Snum |
++------+---------+------------+------+------+
+| 3001 |   18.69 | 1990-10-03 | 2008 | 1007 |
+| 3003 |  767.19 | 1990-10-03 | 2001 | 1001 |
+| 3002 | 1900.10 | 1990-10-03 | 2007 | 1004 |
+| 3005 | 5160.45 | 1990-10-03 | 2003 | 1002 |
+| 3006 | 1098.16 | 1990-10-03 | 2008 | 1007 |
+| 3009 | 1713.23 | 1990-10-04 | 2002 | 1003 |
+| 3007 |   75.75 | 1990-10-04 | 2004 | 1002 |
+| 3008 | 4723.00 | 1990-10-05 | 2006 | 1001 |
+| 3010 | 1309.95 | 1990-10-06 | 2004 | 1002 |
+| 3011 | 9891.88 | 1990-10-06 | 2006 | 1001 |
++------+---------+------------+------+------+
+
++------+----------+----------+--------+------+
+| Cnum | Cname    | City     | Rating | Snum |
++------+----------+----------+--------+------+
+| 2001 | Hoffman  | London   |    100 | 1001 |
+| 2002 | Giovanni | Rome     |    200 | 1003 |
+| 2003 | Liu      | San Jose |    200 | 1002 |
+| 2004 | Grass    | Berlin   |    300 | 1002 |
+| 2006 | Clemens  | London   |    100 | 1001 |
+| 2008 | Cisneros | San Jose |    300 | 1007 |
+| 2007 | Pereira  | Rome     |    100 | 1004 |
++------+----------+----------+--------+------+
+
+select Cnum, count(Cnum) from Orders
+group by Cnum;
+
+
+(select avg(counts) from
+(select count(Cnum) as counts from Orders
+group by Cnum) as counts_temp);  
+
+//1.4286
+
+select Cname, Rating from Customers where
+Cnum IN (
+select Cnum from Orders 
+group by Cnum
+having count(Cnum) >
+(select avg(counts) from
+(select count(Cnum) as counts from Orders
+group by Cnum) as counts_temp)
+); 
+
++----------+--------+
+| Cname    | Rating |
++----------+--------+
+| Grass    |    300 |
+| Clemens  |    100 |
+| Cisneros |    300 |
++----------+--------+
+
+3) Write a query that selects the total amount in orders for each salesperson for 
+whom this total is greater than the amount of the largest order in the table.
+
+select Snum, sum(Amt) from Orders 
+group by Snum
+having sum(Amt) > (select max(amt) from Orders);
+
++------+----------+
+| Snum | sum(Amt) |
++------+----------+
+| 1001 | 15382.07 |
++------+----------+
+
+select Orders.Snum, Salespeople.Sname, sum(Orders.Amt) from Orders 
+join Salespeople on Orders.Snum = Salespeople.Snum
+group by Orders.Snum, Salespeople.Sname
+having sum(Orders.Amt) > (select max(amt) from Orders);
+
++------+-------+-----------------+
+| Snum | Sname | sum(Orders.Amt) |
++------+-------+-----------------+
+| 1001 | Peel  |        15382.07 |
++------+-------+-----------------+

@@ -1,0 +1,154 @@
+Assignment 7
+
+Customers Table
++------+----------+----------+--------+------+
+| Cnum | Cname    | City     | Rating | Snum |
++------+----------+----------+--------+------+
+| 2001 | Hoffman  | London   |    100 | 1001 |
+| 2002 | Giovanni | Rome     |    200 | 1003 |
+| 2003 | Liu      | San Jose |    200 | 1002 |
+| 2004 | Grass    | Berlin   |    300 | 1002 |
+| 2006 | Clemens  | London   |    100 | 1001 |
+| 2008 | Cisneros | San Jose |    300 | 1007 |
+| 2007 | Pereira  | Rome     |    100 | 1004 |
++------+----------+----------+--------+------+
+
+
+Orders Table
++------+---------+------------+------+------+
+| Onum | Amt     | Odate      | Cnum | Snum |
++------+---------+------------+------+------+
+| 3001 |   18.69 | 1990-10-03 | 2008 | 1007 |
+| 3003 |  767.19 | 1990-10-03 | 2001 | 1001 |
+| 3002 | 1900.10 | 1990-10-03 | 2007 | 1004 |
+| 3005 | 5160.45 | 1990-10-03 | 2003 | 1002 |
+| 3006 | 1098.16 | 1990-10-03 | 2008 | 1007 |
+| 3009 | 1713.23 | 1990-10-04 | 2002 | 1003 |
+| 3007 |   75.75 | 1990-10-04 | 2004 | 1002 |
+| 3008 | 4723.00 | 1990-10-05 | 2006 | 1001 |
+| 3010 | 1309.95 | 1990-10-06 | 2004 | 1002 |
+| 3011 | 9891.88 | 1990-10-06 | 2006 | 1001 |
++------+---------+------------+------+------+
+
+1) Write a query that counts all orders for October 3
+
+select count(Odate) from Orders
+where Odate = '1990-10-03';
+
++--------------+
+| count(Odate) |
++--------------+
+|            5 |
++--------------+
+
+2) Write a query that counts the number of different non-NULL city values in the 
+Customers table.
+
+select count(distinct city) from Customers
+where city is not null;
+
++----------------------+
+| COUNT(DISTINCT city) |
++----------------------+
+|                    4 |
++----------------------+
+
+3) Write a query that selects each customer’s smallest order
+
+
+select Customers.cname, min(Orders.Amt) from Orders, Customers
+where Customers.cnum = Orders.cnum
+group by Customers.cname
+order by 1;
+
++----------+-----------------+
+| cname    | min(Orders.Amt) |
++----------+-----------------+
+| Cisneros |           18.69 |
+| Clemens  |         4723.00 |
+| Giovanni |         1713.23 |
+| Grass    |           75.75 |
+| Hoffman  |          767.19 |
+| Liu      |         5160.45 |
+| Pereira  |         1900.10 |
++----------+-----------------+
+
+4) Write a query that selects the first customer, in alphabetical order, whose name 
+begins with G.
+
+select * from Customers
+where cname like 'G%'
+order by cname
+limit 1;
+
++------+----------+------+--------+------+
+| Cnum | Cname    | City | Rating | Snum |
++------+----------+------+--------+------+
+| 2002 | Giovanni | Rome |    200 | 1003 |
++------+----------+------+--------+------+
+
+
+5) Write a query that selects the highest rating in each city.
+
+select City, max(Rating) from Customers
+group by City;
+
++----------+-------------+
+| City     | max(Rating) |
++----------+-------------+
+| London   |         100 |
+| Rome     |         200 |
+| San Jose |         300 |
+| Berlin   |         300 |
++----------+-------------+
+
+
+6) Write a query that counts the number of salespeople registering orders for each 
+day. (If a salesperson has more than one order on a given day, he or she should be 
+counted only once.).
+
+
++------+---------+------------+------+------+
+| Onum | Amt     | Odate      | Cnum | Snum |
++------+---------+------------+------+------+
+| 3001 |   18.69 | 1990-10-03 | 2008 | 1007 |
+| 3003 |  767.19 | 1990-10-03 | 2001 | 1001 |
+| 3002 | 1900.10 | 1990-10-03 | 2007 | 1004 |
+| 3005 | 5160.45 | 1990-10-03 | 2003 | 1002 |
+| 3006 | 1098.16 | 1990-10-03 | 2008 | 1007 |
+| 3009 | 1713.23 | 1990-10-04 | 2002 | 1003 |
+| 3007 |   75.75 | 1990-10-04 | 2004 | 1002 |
+| 3008 | 4723.00 | 1990-10-05 | 2006 | 1001 |
+| 3010 | 1309.95 | 1990-10-06 | 2004 | 1002 |
+| 3011 | 9891.88 | 1990-10-06 | 2006 | 1001 |
++------+---------+------------+------+------+
+
+
+ 
+select DISTINCT Odate, count(DISTINCT Snum) from Orders
+group by Odate
+order by Odate;
+
++------------+----------------------+
+| Odate      | count(DISTINCT Snum) |
++------------+----------------------+
+| 1990-10-03 |                    4 |
+| 1990-10-04 |                    2 |
+| 1990-10-05 |                    1 |
+| 1990-10-06 |                    2 |
++------------+----------------------+
+
+OR 
+
+select Odate, count(Snum) from 
+(select DISTINCT Odate, Snum from Orders) abcd
+group by Odate;
+
++------------+-------------+
+| Odate      | count(Snum) |
++------------+-------------+
+| 1990-10-03 |           4 |
+| 1990-10-04 |           2 |
+| 1990-10-05 |           1 |
+| 1990-10-06 |           2 |
++------------+-------------+

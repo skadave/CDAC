@@ -1,0 +1,170 @@
+Assignment 13
+
+Customers
++------+----------+----------+--------+------+
+| Cnum | Cname    | City     | Rating | Snum |
++------+----------+----------+--------+------+
+| 2001 | Hoffman  | London   |    100 | 1001 |
+| 2002 | Giovanni | Rome     |    200 | 1003 |
+| 2003 | Liu      | San Jose |    200 | 1002 |
+| 2004 | Grass    | Berlin   |    300 | 1002 |
+| 2006 | Clemens  | London   |    100 | 1001 |
+| 2008 | Cisneros | San Jose |    300 | 1007 |
+| 2007 | Pereira  | Rome     |    100 | 1004 |
++------+----------+----------+--------+------+
+
+Orders
++------+---------+------------+------+------+
+| Onum | Amt     | Odate      | Cnum | Snum |
++------+---------+------------+------+------+
+| 3001 |   18.69 | 1990-10-03 | 2008 | 1007 |
+| 3003 |  767.19 | 1990-10-03 | 2001 | 1001 |
+| 3002 | 1900.10 | 1990-10-03 | 2007 | 1004 |
+| 3005 | 5160.45 | 1990-10-03 | 2003 | 1002 |
+| 3006 | 1098.16 | 1990-10-03 | 2008 | 1007 |
+| 3009 | 1713.23 | 1990-10-04 | 2002 | 1003 |
+| 3007 |   75.75 | 1990-10-04 | 2004 | 1002 |
+| 3008 | 4723.00 | 1990-10-05 | 2006 | 1001 |
+| 3010 | 1309.95 | 1990-10-06 | 2004 | 1002 |
+| 3011 | 9891.88 | 1990-10-06 | 2006 | 1001 |
++------+---------+------------+------+------+
+
+Salespeople
++------+---------+-----------+------+
+| Snum | Sname   | City      | Comm |
++------+---------+-----------+------+
+| 1001 | Peel    | London    | 0.12 |
+| 1002 | Serres  | San Jose  | 0.13 |
+| 1004 | Motika  | London    | 0.11 |
+| 1007 | Rifkin  | Barcelona | 0.15 |
+| 1003 | Axelrod | New York  | 0.10 |
++------+---------+-----------+------+
+
+1) Create a union of two queries that shows the names, cities, and ratings of all 
+customers. Those with rating of 200 or greater will also have the words “High 
+Rating”, while the others will have the words “Low Rating”.
+
+select Cname, City, Rating, 'High Rating' as 'Rating Type' from Customers
+where Rating >= 200
+union
+select Cname, City, Rating, 'Low Rating' as 'Rating Type' from Customers
+where Rating < 200;
+
++----------+----------+--------+-------------+
+| Cname    | City     | Rating | Rating Type |
++----------+----------+--------+-------------+
+| Giovanni | Rome     |    200 | High Rating |
+| Liu      | San Jose |    200 | High Rating |
+| Grass    | Berlin   |    300 | High Rating |
+| Cisneros | San Jose |    300 | High Rating |
+| Hoffman  | London   |    100 | Low Rating  |
+| Clemens  | London   |    100 | Low Rating  |
+| Pereira  | Rome     |    100 | Low Rating  |
++----------+----------+--------+-------------+
+
+----------------------------------------------------
+select Cname, City, concat(Rating, ' High Rating') as 'Rating' from Customers
+where Rating >= 200
+union
+select Cname, City, concat(Rating, ' Low Rating') as 'Rating' from Customers
+where Rating < 200;
++----------+----------+-----------------+
+| Cname    | City     | Rating          |
++----------+----------+-----------------+
+| Giovanni | Rome     | 200 High Rating |
+| Liu      | San Jose | 200 High Rating |
+| Grass    | Berlin   | 300 High Rating |
+| Cisneros | San Jose | 300 High Rating |
+| Hoffman  | London   | 100 Low Rating  |
+| Clemens  | London   | 100 Low Rating  |
+| Pereira  | Rome     | 100 Low Rating  |
++----------+----------+-----------------+
+
+2) Write a command that produces the name and number of each salesperson and 
+each customer with more than one current order. Put the results in alphabetical 
+order.
+
+select Salespeople.Sname as name, Salespeople.Snum as number from Salespeople
+join Orders on Salespeople.Snum = Orders.Snum
+group by name, number
+having count(Orders.onum) > 1
+
+union
+
+select Customers.Cname as name, Customers.Cnum as number from Customers
+join Orders on Customers.Cnum = Orders.Cnum
+group by name, number
+having count(Orders.Onum) > 1
+
+order by name;
+
++----------+--------+
+| name     | number |
++----------+--------+
+| Cisneros |   2008 |
+| Clemens  |   2006 |
+| Grass    |   2004 |
+| Peel     |   1001 |
+| Rifkin   |   1007 |
+| Serres   |   1002 |
++----------+--------+
+
+3) Form a union of three queries. Have the first select the snums of all salespeople in 
+San Jose; the second, the cnums of all customers in San Jose; and the third the 
+onums of all orders on October 3. Retain duplicates between the last two queries 
+but eliminate any redundancies between either of them and the first. 
+(Note: in the sample tables as given, there would be no such redundancy. This is 
+besides the point.)
+
+select snum as number from Salespeople
+where City = 'San Jose'
+
+union
+
+(select cnum as number from Customers
+where City = 'San Jose'
+
+union all
+
+select onum as number from Orders
+where date_format(odate, '%M %d') = 'October 03');
+
+
++--------+
+| number |
++--------+
+|   1002 |
+|   2003 |
+|   2008 |
+|   3001 |
+|   3003 |
+|   3002 |
+|   3005 |
+|   3006 |
++--------+
+
+---------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+select date_format(odate,'%M %d') from orders;
+
+select concat(substr(date_format(odate,'%M %d'),1,7), ' ', substr(date_format(odate,'%M %d'),-1)) as 'op' from orders;
+
+select instr(op, 'r')  from
+(
+select date_format(odate, '%M %d') as op from orders) as abc;
+
+select instr(date_format(odate, '%M %d'), 'r') as op from orders;
+
+
+
+
+
